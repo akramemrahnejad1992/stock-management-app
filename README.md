@@ -1,3 +1,6 @@
+Here’s how you can add Docker instructions to your existing README for the Stock Management Application:
+
+```markdown
 # Stock Management Application
 
 ## Overview
@@ -22,12 +25,60 @@ This Stock Management Application allows users to track and manage stock data. U
 
 ### Prerequisites
 - Python 3.x
-- Django
-- Django REST Framework
-- yfinance
-- PostgreSQL (or your preferred database)
+- Docker
+- Docker Compose (if applicable)
 
-### Steps
+### Running the Application with Docker
+
+#### Step 1: Clone the Repository
+First, clone the repository to your local machine:
+
+```bash
+git clone https://github.com/yourusername/stock-management-app.git
+cd stock-management-app
+```
+
+#### Step 2: Build the Docker Image
+To build the Docker image, run the following command:
+
+```bash
+docker build -t stock_management_app .
+```
+
+#### Step 3: Run the Docker Container
+After building the image, you can run the Docker container:
+
+```bash
+docker run -d -p 8000:8000 stock_management_app
+```
+
+#### Step 4: Access the Application
+Once the container is running, you can access the application by navigating to:
+
+```
+http://localhost:8000/
+```
+
+### Using Docker Compose (Optional)
+If you have a `docker-compose.yml` file, you can use Docker Compose to simplify the process:
+
+1. **Run Docker Compose**:
+
+   ```bash
+   docker-compose up
+   ```
+
+2. **Access the Application**:
+
+   Navigate to:
+
+   ```
+   http://localhost:8000/
+   ```
+
+### Traditional Installation Steps (Optional)
+If you prefer to run the application without Docker, follow these steps:
+
 1. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/stock-management-app.git
