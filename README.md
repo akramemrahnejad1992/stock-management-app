@@ -1,6 +1,3 @@
-Here’s how you can add Docker instructions to your existing README for the Stock Management Application:
-
-```markdown
 # Stock Management Application
 
 ## Overview
