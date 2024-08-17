@@ -1,0 +1,43 @@
+
+
+
+# read more on https://www.codingforentrepreneurs.com/shorts/how-i-use-redis-for-new-projects-with-docker-compose/
+version: '3.9'
+services:
+    django:
+        container_name: django
+        build:
+          context: . 
+          dockerfile: ./Dockerfile 
+        command: python manage.py runserver 0.0.0.0:8000
+        ports:
+            - 8000:8000
+        
+        volumes:
+            - .:/app
+        environment:
+            - DEBUG=True
+            - SECRET_KEY=123456
+            - ALLOWED_HOSTS=localhost,127.0.0.1
+            - SERVICE_TYPE=django 
+            - DB_NAME=stock_db_new
+            - DB_USER=akram_en
+            - DB_PASSWORD=1370
+            - DB_HOST=db  # This should match the service name defined below
+            - DB_PORT=5432
+    db:
+        image: postgres:latest
+        container_name: postgres
+        environment:
+            POSTGRES_DB: stock_db_new
+            POSTGRES_USER: akram_en
+            POSTGRES_PASSWORD: 1370
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+volumes:
+    postgres_data:
+
+

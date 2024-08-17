@@ -1,0 +1,19 @@
+<!-- stocks/templates/stocks/generate_token.html -->
+{% extends 'stocks/base.html' %}
+
+{% block content %}
+<h1>Generate API Token</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Generate Token</button>
+</form>
+
+{% if error %}
+    <h2 style="color: red;">Error generating token:</h2>
+    <pre>{{ error }}</pre>
+{% elif token %}
+    <h2>Your API Token:</h2>
+    <p>{{ token }}</p>
+{% endif %}
+{% endblock %}

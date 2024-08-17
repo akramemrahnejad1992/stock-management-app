@@ -1,0 +1,49 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+ENV/
+env/
+.env
+
+# Django migrations
+*/migrations/*
+!*/migrations/__init__.py
+
+# Database files
+*.sqlite3
+*.db
+
+# Static files
+/static/
+media/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python egg files
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# Pytest cache
+.cache/
+
+# Environment variable files
+*.env
+
+# Logs
+*.log
+
+# Swagger UI generated files
+swagger/

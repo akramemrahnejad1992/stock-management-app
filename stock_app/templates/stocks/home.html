@@ -1,0 +1,88 @@
+{% extends 'stocks/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to the Stock Dashboard</h1>
+<p>Your one-stop solution for stock tracking and analysis.</p>
+
+<h2>Available Stocks</h2>
+<ul>
+    {% for stock in all_stocks %}
+        <li>{{ stock.name }} ({{ stock.symbol }})</li>
+    {% empty %}
+    <li>No Available stocks...</li>
+    {% endfor %}
+</ul>
+
+{% if user.is_authenticated %}
+    <p>You are logged in. <a href="{% url 'dashboard' %}">Go to your Dashboard</a></p>
+    {% if stocks %}
+        <form method="POST">
+            {% csrf_token %}
+            {% for stock in stocks %}
+                <input type="checkbox" name="stocks" value="{{ stock.id }}">{{ stock.symbol }}<br>
+                
+            {% endfor %}
+            <button type="submit">Select Stocks</button>
+        </form>
+    {% endif %}
+{% else %}
+    <p>Please <a href="{% url 'login' %}">login</a> or <a href="{% url 'register' %}">register</a> to select stocks.</p>
+{% endif %}
+
+{% if stock_data %}
+    <h2>Stock Data Charts</h2>
+    {% for symbol, data in stock_data.items %}
+        <h3>{{ symbol }}</h3>
+        <canvas id="chart-{{ symbol }}" width="400" height="200"></canvas>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const ctx = document.getElementById('chart-{{ symbol }}').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ data.dates|safe }},
+                    datasets: [
+                        {
+                            label: 'Close Price',
+                            data: {{ data.close_prices|safe }},
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            fill: false
+                        },
+                        {
+                            label: 'Volume',
+                            data: {{ data.volumes|safe }},
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            fill: false,
+                            yAxisID: 'y-axis-2'
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            id: 'y-axis-1',
+                            type: 'linear',
+                            position: 'left',
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }, {
+                            id: 'y-axis-2',
+                            type: 'linear',
+                            position: 'right',
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+    {% endfor %}
+{% endif %}
+{% endblock %}
+

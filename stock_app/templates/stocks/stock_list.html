@@ -1,0 +1,15 @@
+{% extends 'stocks/base.html' %}
+
+{% block content %}
+<h1>Stock List</h1>
+{% if stocks %}
+    <form method="POST">
+        {% csrf_token %}
+        {% for stock in stocks %}
+            <input type="checkbox" name="stocks" value="{{ stock.id }}">{{ stock.symbol }}<br>
+            
+        {% endfor %}
+        <button type="submit">Select Stocks</button>
+    </form>
+{% endif %}
+{% endblock %}

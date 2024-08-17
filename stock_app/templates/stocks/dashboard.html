@@ -1,0 +1,75 @@
+{% extends 'stocks/base.html' %}
+
+{% block title %} {{ user.username }} Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Selected Stocks</h2>
+    <p>This is your dashboard where you can manage your stocks.</p>
+    
+    {% if selected_stocks %}
+        <ul>
+            {% for user_stock in selected_stocks %}
+                <li>{{ user_stock.stock.symbol }} - {{ user_stock.stock.company_name }}</li>
+            {% endfor %}
+        </ul>
+        <p> Define <a href="{% url 'select-new-stock' %}"> new one! </a> </p>
+        
+        <div id="charts" style="width:100%;"></div> <!-- Container for all charts -->
+
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script>
+            // Assuming stock_data is passed from the Django view
+            var stockData = {{ stock_data|safe }};
+        
+            // Create traces for each stock and render them in separate divs
+            for (var symbol in stockData) {
+                // Create a new div for each stock
+                var chartDiv = document.createElement('div');
+                chartDiv.style.width = "100%";
+                chartDiv.style.height = "400px"; // Set height for each chart
+                chartDiv.id = symbol; // Set unique ID for each chart
+                document.getElementById('charts').appendChild(chartDiv);
+
+                var trace = {
+                    x: stockData[symbol].dates,
+                    open: stockData[symbol].open,
+                    high: stockData[symbol].high,
+                    low: stockData[symbol].low,
+                    close: stockData[symbol].close,
+                    type: 'candlestick',
+                    name: symbol,
+                    increasing: { line: { color: '#17BECF' } },
+                    decreasing: { line: { color: '#FF000' } },
+                    line: { color: 'rgba(31,119,180,1)' }
+                };
+
+                var data = [trace];
+
+                var layout = {
+                    title: symbol + ' Stock Price', // Add the stock symbol to the title
+                    dragmode: 'zoom',
+                    margin: { r: 10, t: 25, b: 40, l: 60 },
+                    showlegend: false,
+                    xaxis: {
+                        autorange: true,
+                        title: 'Date',
+                        type: 'date',
+                        rangeslider: { visible: false } // Disable range slider
+                    },
+                    yaxis: {
+                        autorange: true,
+                        title: 'Price',
+                        type: 'linear'
+                    }
+                };
+
+                // Render the plot for each symbol in its respective div
+                Plotly.newPlot(chartDiv.id, data, layout);
+            }
+        </script>
+        
+    {% else %}
+        <p>You have no favorite stocks selected. You can select Stocks from <a href="{% url 'stock_lists' %}"> existence list </a></p>
+        <p> Or you can define <a href="{% url 'select-new-stock' %}"> new one! </a> </p>
+    {% endif %}
+{% endblock %}
